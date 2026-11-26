@@ -1,4 +1,4 @@
-replicaCount: 2
+replicaCount: 3
 
 image:
   repository: nginxdemos/hello
@@ -13,7 +13,7 @@ service:
   type: ClusterIP
   port: 80
 
-greeting: "Bonjour depuis Helm sur macOS !"
+greeting: "Bonjour depuis GitOps"
 
 resources:
   requests:
