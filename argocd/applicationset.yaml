@@ -18,6 +18,9 @@ spec:
           - environment: prod
             namespace: hello-prod
             valueFile: values-prod.yaml
+          - environment: staging
+            namespace: hello-staging
+            valueFile: values.yaml
   syncPolicy:
     preserveResourcesOnDeletion: false
   template:
