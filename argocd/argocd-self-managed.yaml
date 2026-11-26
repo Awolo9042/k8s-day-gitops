@@ -1,0 +1,34 @@
+# Extension optionnelle : Argo CD gere son propre chart et ses valeurs Git.
+# Committer argocd/values.yaml dans le depot avant d'appliquer ce fichier.
+# Aucun finalizer : supprimer cette Application conserve Argo CD installe.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-self-managed
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: k8s-day
+spec:
+  project: default
+  sources:
+    - repoURL: https://argoproj.github.io/argo-helm
+      chart: argo-cd
+      targetRevision: 10.20.0
+      helm:
+        releaseName: argocd
+        valueFiles:
+          - $values/argocd/values.yaml
+    - repoURL: https://github.com/Awolo9042/k8s-day-gitops.git
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      enabled: true
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

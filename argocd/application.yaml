@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hello-web-dev
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: hello-web
+    app.kubernetes.io/part-of: k8s-day
+    environment: dev
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Awolo9042/k8s-day-gitops.git
+    targetRevision: main
+    path: hello-web
+    helm:
+      releaseName: hello-web
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: hello-dev
+  syncPolicy:
+    automated:
+      enabled: true
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

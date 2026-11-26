@@ -1,0 +1,24 @@
+replicaCount: 2
+
+image:
+  repository: nginxdemos/hello
+  # Une chaine vide utilise Chart.appVersion, soit le tag fixe "0.4".
+  tag: ""
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+greeting: "Bonjour depuis Helm sur macOS !"
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi

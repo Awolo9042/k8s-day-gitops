@@ -1,0 +1,53 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: hello-web
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: k8s-day
+spec:
+  goTemplate: true
+  goTemplateOptions:
+    - missingkey=error
+  generators:
+    - list:
+        elements:
+          - environment: dev
+            namespace: hello-dev
+            valueFile: values.yaml
+          - environment: prod
+            namespace: hello-prod
+            valueFile: values-prod.yaml
+  syncPolicy:
+    preserveResourcesOnDeletion: false
+  template:
+    metadata:
+      name: 'hello-web-{{ .environment }}'
+      namespace: argocd
+      labels:
+        app.kubernetes.io/name: hello-web
+        app.kubernetes.io/part-of: k8s-day
+        environment: '{{ .environment }}'
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/Awolo9042/k8s-day-gitops.git
+        targetRevision: main
+        path: hello-web
+        helm:
+          releaseName: hello-web
+          # Helm charge d'abord les valeurs par defaut de values.yaml.
+          valueFiles:
+            - '{{ .valueFile }}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{ .namespace }}'
+      syncPolicy:
+        automated:
+          enabled: true
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

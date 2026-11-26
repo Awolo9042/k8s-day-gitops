@@ -1,0 +1,47 @@
+# Valeurs du TP pour le chart argo/argo-cd version 10.20.0.
+# Acces local : kubectl -n argocd port-forward svc/argocd-server 8080:443
+configs:
+  cm:
+    url: https://localhost:8080
+    admin.enabled: true
+    timeout.reconciliation: 30s
+    timeout.reconciliation.jitter: 0s
+    # Les Applications dev/prod ont des noms differents du releaseName Helm.
+    # Le suivi par annotation conserve les labels/selecteurs du chart.
+    application.resourceTrackingMethod: annotation
+  params:
+    server.insecure: false
+
+server:
+  enabled: true
+  replicas: 1
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: false
+
+controller:
+  replicas: 1
+
+repoServer:
+  replicas: 1
+
+applicationSet:
+  replicas: 1
+
+redis:
+  enabled: true
+
+redis-ha:
+  enabled: false
+
+# Le compte admin local suffit pour cet atelier.
+dex:
+  enabled: false
+
+notifications:
+  enabled: false
+
+crds:
+  install: true
+  keep: true

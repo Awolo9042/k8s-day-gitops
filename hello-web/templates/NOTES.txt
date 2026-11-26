@@ -1,0 +1,15 @@
+L'application est installee dans le namespace {{ .Release.Namespace }}.
+
+1. Dans un terminal dedie, laisse cette commande en cours d'execution :
+
+   kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "hello-web.fullname" . }} 8081:{{ .Values.service.port }}
+
+2. Dans un autre terminal macOS, ouvre l'application :
+
+   open http://localhost:8081
+
+3. Verifie la variable d'environnement injectee dans le conteneur :
+
+   kubectl -n {{ .Release.Namespace }} exec deploy/{{ include "hello-web.fullname" . }} -- printenv GREETING
+
+Le port local 8080 reste disponible pour Argo CD dans la suite du TP.
