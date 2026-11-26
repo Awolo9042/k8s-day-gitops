@@ -3,7 +3,7 @@ replicaCount: 3
 image:
   repository: nginxdemos/hello
   # Une chaine vide utilise Chart.appVersion, soit le tag fixe "0.4".
-  tag: ""
+  tag: "0.4-plain-text"
   pullPolicy: IfNotPresent
 
 nameOverride: ""
